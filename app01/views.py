@@ -152,9 +152,10 @@ def login2(request):
             return JsonResponse(ret)
     return render(request,'login2.html',{'form_obj':form_obj})
 
-@login_required
+
 def home(request):
-    return render(request,'home.html')
+    article_list=models.Article.objects.all()
+    return render(request,'home.html',{'article_list':article_list})
 
 def logout(request):
     #直接调用auth内置的注销方法
@@ -226,3 +227,17 @@ def reg(request):
             ret['data']=form_obj.errors
         return JsonResponse(ret)
     return render(request,'reg.html',{'form_obj':form_obj})
+
+
+def index(request,username):
+    user_obj=models.UserInfo.objects.filter(username=username).first()
+    if not user_obj:
+        return HttpResponse(404)
+    else:
+        blog=user_obj.blog
+        article_list=models.Article.objects.filter(user__username=username)
+    from django.db.models import Count
+    category_list=models.Category.objects.filter(blog=blog).annotate(num=Count('article')).values('title','num')
+    tag_list=models.Tag.objects.filter(blog=blog).annotate(num=Count('title')).values('title','num')
+    data_list=models.Article.objects.all().extra(select={'date':"DATE_FORMAT(create_time,'%%Y-%%m')"}).values('date').annotate(num=Count('nid')).values('date','num')
+    return render(request,'index.html',{'blog':blog,'article_list':article_list,'category_list':category_list,'tag_list':tag_list,'data_list':data_list})

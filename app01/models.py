@@ -61,6 +61,13 @@ class Article(models.Model):
 
     user = models.ForeignKey(to="UserInfo", to_field="nid")
 
+    #评论数
+    comment_count=models.IntegerField(default=0)
+    #点赞数
+    up_count=models.IntegerField(default=0)
+    #反对数
+    down_count=models.IntegerField(default=0)
+
     tags = models.ManyToManyField(
         to="Tag",
         through="Article2Tag",
