@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/fontawesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/sweetalert/sweetalert.css">
+    <style>
+        #show_avatar{
+            width: 80px;
+            height:80px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="page-header">
+            <h1>博客园注册页面
+                <small>技术精英的地盘</small>
+            </h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+
+                   <div class="row">
+                        <div class="col-md-6"><h3 class="panel-title"><i class="fa fa-user-secret fa-3x" aria-hidden="true"></i></h3></div>
+                       <div class="col-md-6 "><i class="fa fa-users fa-3x pull-right " aria-hidden="true"></i></div>
+                   </div>
+
+            </div>
+            <div class="panel-body">
+                <form class="form-horizontal" action="" method="post" novalidate enctype="multipart/form-data" autocomplete="off">
+                    {% csrf_token %}
+                    <div class="form-group">
+                                                {#  如果这个字段有报错信息，那我就添加has-error的样式#}
+                        <label for="{{ form_obj.username.id_for_label }}"
+                               class="col-sm-2 control-label col-lg-push-2">{{ form_obj.username.label }}</label>
+                        <div class="col-sm-4 col-lg-push-2">
+                            {{ form_obj.username }}
+                            <span class="help-block"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form_obj.password.id_for_label }}"
+                               class="col-sm-2 control-label col-lg-push-2">{{ form_obj.password.label }}</label>
+                        <div class="col-sm-4 col-lg-push-2">
+                            {{ form_obj.password }}
+                            <span class="help-block"></span>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label for="{{ form_obj.confirm_password.id_for_label }}"
+                               class="col-sm-2 control-label col-lg-push-2">{{ form_obj.confirm_password.label }}</label>
+                        <div class="col-sm-4 col-lg-push-2">
+                            {{ form_obj.confirm_password }}
+                            <span class="help-block"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form_obj.phone.id_for_label }}"
+                               class="col-sm-2 control-label col-lg-push-2">{{ form_obj.phone.label }}</label>
+                        <div class="col-sm-4 col-lg-push-2">
+                            {{ form_obj.phone }}
+                            <span class="help-block"></span>
+                        </div>
+                    </div>
+{#                    <div class="form-group {% if form_obj.email.errors.0 %}has-error{% endif %}">#}
+{#                        <label for="{{ form_obj.email.id_for_label }}"#}
+{#                               class="col-sm-2 control-label col-lg-push-2">{{ form_obj.email.label }}</label>#}
+{#                        <div class="col-sm-4 col-lg-push-2">#}
+{#                            {{ form_obj.email }}#}
+{#                            <span style="color: red;">{{ form_obj.email.errors.0 }}</span>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="form-group">#}
+{#                    <label class="col-md-2 control-label col-lg-push-2">{{ form_obj.gender.label }}</label>#}
+{#                        <div class="col-md-10 col-lg-push-2">#}
+{#                            <div class="radio">#}
+{#                                {% for radio in form_obj.gender %}#}
+{#                                    <label for="{{ radio.id_for_label }}">#}
+{#                                        {{ radio.tag }}{{ radio.choice_label }}#}
+{#                                    </label>#}
+{#                                {% endfor %}#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="form-group">#}
+{#                        <label class="col-md-2 control-label col-lg-push-2">{{ form_obj.hobby.label }}</label>#}
+{#                        <div class="col-md-4 col-lg-push-2">#}
+{#                            {{ form_obj.hobby }}#}
+{#                        </div>#}
+{#                    </div>#}
+                    <div class="form-group">
+                        <label for='id_avatar' class="col-sm-2 control-label col-lg-push-2">头像</label>
+                        <div class="col-md-4 col-lg-push-2">
+                            <label for="id_avatar"><img src="/media/avatar/default.png" alt="" id="show_avatar"></label>
+                            <input type="file" name="avatar" id="id_avatar" style="display: none">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-5 col-sm-2">
+                            <button type="button" class="btn btn-primary btn-block" id="b1">注册</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/static/jquery-3.3.1.min.js"></script>
+<script src="/static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+<script src="/static/setup_Ajax.js"></script>
+<script>
+    $('#b1').click(function () {
+       let formDataObj=new FormData();
+       formDataObj.append('username',$('#id_username').val());
+       formDataObj.append('password',$('#id_password').val());
+       formDataObj.append('confirm_password',$('#id_confirm_password').val());
+       formDataObj.append('phone',$('#id_phone').val());
+       formDataObj.append('avatar',$('#id_avatar')[0].files[0]);
+       $.ajax({
+           url:'',
+           type:'POST',
+           processData:false,
+           contentType:false,
+           data:formDataObj,
+           success:function (data) {
+               if (!data.flag){
+                   location.href=data.data || '/middle/'
+               }else {
+                    let errorMsg=data.data;
+                    $.each(errorMsg,function (k,v) {
+                        $('#id_'+k).next('.help-block').text(v[0]).parent().parent().addClass('has-error')
+                    })
+               }
+           }
+       })
+    });
+    $('#id_avatar').change(function () {
+        //拿到用户选中的头像文件
+        let FileObj=this.files[0];
+        //读取文件路径
+        let fileReader=new FileReader();
+        fileReader.readAsDataURL(FileObj);
+        //等图片读取完毕之后，再做后续的操作
+        fileReader.onload=function () {
+            //设置预览图片
+            $('#show_avatar').attr('src',fileReader.result);
+        };
+    });
+    $('input').focus(function () {
+        $(this).next().text('').parent().parent().removeClass('has-error')
+    })
+</script>
+</body>
+</html>

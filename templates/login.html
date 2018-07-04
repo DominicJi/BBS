@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/fontawesome/css/font-awesome.min.css">
+    <style>
+        #v-code {
+            width: 120px;
+            height: 35px;
+            position: absolute;
+            right: -170px;
+            top: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="page-header">
+
+            <h1><i class="fa fa-user-secret fa-2x" aria-hidden="true"></i>博客园
+                <small>开启技术时代</small>
+            </h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">博客登陆</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <form class="form-horizontal col-md-12 col-lg-push-2" action="" method="post">
+                        {% csrf_token %}
+                        <div class="form-group ">
+                            <label for="{{ form_obj.username.id_for_label }}"
+                                   class="col-sm-2 control-label">{{ form_obj.username.label }}</label>
+                            <div class="col-sm-4">
+                                {{ form_obj.username }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form_obj.password.id_for_label }}"
+                                   class="col-sm-2 control-label">{{ form_obj.password.label }}</label>
+                            <div class="col-sm-4">
+                                {{ form_obj.password }}
+                            </div>
+                        </div>
+                        <div class="form-group" style="position: relative">
+                            <label for="inputPassword3" class="col-sm-2 control-label">验证码</label>
+                            <div class="col-sm-2">
+                                <input type="text" class="form-control" id="code" placeholder="验证码">
+                                <img src="/v_code/" alt="" id="v-code">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-3 col-sm-1">
+                                <button type="button" class="btn btn-success btn-block" id="b1">登陆</button>
+                                <span style="color: red" id="error"></span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="/static/jquery-3.3.1.min.js"></script>
+<script src="/static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+<script src="/static/setup_Ajax.js"></script>
+<script>
+    $('#b1').click(function () {
+        $.ajax({
+            url:'',
+            type:'POST',
+            data:{
+                username:$('#id_username').val(),
+                password:$('#id_password').val(),
+                v_code:$('#code').val()
+            },
+            success:function (data) {
+                if(!data.code){
+                    location.href=data.data;
+                }else {
+                    $('#error').text(data.data)
+                }
+            }
+        })
+    });
+    $('form input').focus(function () {
+        $('#error').text('');
+    });
+    $('#v-code').click(function () {
+        this.src+='?'
+    })
+
+
+
+</script>
+</body>
+</html>
