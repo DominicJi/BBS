@@ -239,5 +239,19 @@ def index(request,username):
     from django.db.models import Count
     category_list=models.Category.objects.filter(blog=blog).annotate(num=Count('article')).values('title','num')
     tag_list=models.Tag.objects.filter(blog=blog).annotate(num=Count('title')).values('title','num')
-    data_list=models.Article.objects.all().extra(select={'date':"DATE_FORMAT(create_time,'%%Y-%%m')"}).values('date').annotate(num=Count('nid')).values('date','num')
+    data_list=models.Article.objects.filter(user=user_obj).extra(select={'date':"DATE_FORMAT(create_time,'%%Y-%%m')"}).values('date').annotate(num=Count('nid')).values('date','num')
     return render(request,'index.html',{'blog':blog,'article_list':article_list,'category_list':category_list,'tag_list':tag_list,'data_list':data_list})
+
+
+
+
+
+
+
+
+
+
+
+
+
+

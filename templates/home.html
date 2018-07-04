@@ -79,12 +79,12 @@
         <div class="col-md-8">
             {% for article in article_list %}
                 <div>
-                    <h2>{{ article.title }}</h2>
+                    <h2><a href="/app01/{{ article.title }}">{{ article.title }}</a></h2>
                 </div>
                 <div>
                     <div class="media">
                         <div class="media-left media-middle">
-                            <a href="#">
+                            <a href="/media/{{ article.user.avatar }}" target="_blank">
                                 <img class="media-object article_avatar" src="/media/{{ article.user.avatar }}" alt="...">
                             </a>
                         </div>
@@ -95,7 +95,7 @@
                     </div>
                 </div>
                 <div class="article-footer">
-                <span><a href="/app01/{{ article.user.username }}/">{{ article.user.username }}</a></span>发布于 <span>{{ article.create_time|date:'Y-m-d h' }}</span><span class="glyphicon glyphicon-comment">({{ article.comment_count }})</span><span class="glyphicon glyphicon-thumbs-up">({{ article.up_count }})</span>
+                <span><a href="/app01/{{ article.user.username }}/">{{ article.user.username }}</a></span>发布于 <span>{{ article.create_time }}</span><span class="glyphicon glyphicon-comment">({{ article.comment_count }})</span><span class="glyphicon glyphicon-thumbs-up">({{ article.up_count }})</span>
                 </div>
                 <hr>
             {% endfor %}
