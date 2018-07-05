@@ -22,53 +22,13 @@
 </nav>
 <div class="container-fluid">
     <div class="col-md-3">
-<div class="panel panel-info">
-  <div class="panel-heading">
-    <h3 class="panel-title">文章分类</h3>
-  </div>
-  <div class="panel-body">
-  <ul class="list-unstyled">
-      {% for category in category_list %}
-        <li><a href="">{{ category.title}}({{ category.num  }})</a></li>
-    {% endfor %}
-  </ul>
-
-
-  </div>
-</div>
-        <div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title">文章标签</h3>
-  </div>
-  <div class="panel-body">
-    <ul class="list-unstyled">
-        {% for tag in tag_list %}
-            <li><a href="">{{ tag.title }}({{ tag.num }})</a></li>
-        {% endfor %}
-
-
-
-    </ul>
-  </div>
-</div>
-        <div class="panel panel-warning">
-  <div class="panel-heading">
-    <h3 class="panel-title">日期归档</h3>
-  </div>
-  <div class="panel-body">
-    <ul class="list-unstyled">
-        {% for foo in data_list %}
-               <li><a href="">{{ foo.date }}({{ foo.num }})</a></li>
-        {% endfor %}
-
-    </ul>
-  </div>
-</div>
+        {% load my_inclusion %}
+        {% left_panel username %}
     </div>
     <div class="col-md-9">
             {% for article in article_list %}
                 <div>
-                    <h2>{{ article.title }}</h2>
+                    <h2><a href="/app01/{{ username }}/article/{{ article.nid }}/">{{ article.title }}</a></h2>
                 </div>
                 <div>
                     <div class="media">
@@ -89,7 +49,6 @@
                 <hr>
             {% endfor %}
     </div>
-
 </div>
 
 

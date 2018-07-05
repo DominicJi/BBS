@@ -229,19 +229,32 @@ def reg(request):
     return render(request,'reg.html',{'form_obj':form_obj})
 
 
-def index(request,username):
+def index(request,username,*args):
     user_obj=models.UserInfo.objects.filter(username=username).first()
     if not user_obj:
         return HttpResponse(404)
     else:
         blog=user_obj.blog
-        article_list=models.Article.objects.filter(user__username=username)
-    from django.db.models import Count
-    category_list=models.Category.objects.filter(blog=blog).annotate(num=Count('article')).values('title','num')
-    tag_list=models.Tag.objects.filter(blog=blog).annotate(num=Count('title')).values('title','num')
-    data_list=models.Article.objects.filter(user=user_obj).extra(select={'date':"DATE_FORMAT(create_time,'%%Y-%%m')"}).values('date').annotate(num=Count('nid')).values('date','num')
-    return render(request,'index.html',{'blog':blog,'article_list':article_list,'category_list':category_list,'tag_list':tag_list,'data_list':data_list})
+    if not args:
+        article_list = models.Article.objects.filter(user__username=username)
+    else:
+        if args[0]=='category':
+            article_list=models.Article.objects.filter(user=user_obj).filter(category__title=args[1])
+        elif args[0]=='tag':
+            article_list=models.Article.objects.filter(user=user_obj).filter(tags__title=args[1])
+        else:
+            year,month=args[1].split('-')
+            article_list=models.Article.objects.filter(user=user_obj).filter(create_time__year=year,create_time__month=month)
+    return render(request,'index.html',{'blog':blog,'article_list':article_list,'username':username})
 
+def article_detail(request,username,article_id):
+    user_obj=models.UserInfo.objects.filter(username=username).first()
+    if not user_obj:
+        return HttpResponse(404)
+    else:
+        blog=user_obj.blog
+    article_obj=models.Article.objects.filter(pk=article_id).first()
+    return render(request,'article_detail.html',{'username':username,'blog':blog,'article':article_obj})
 
 
 

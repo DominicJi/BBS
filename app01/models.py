@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 class UserInfo(AbstractUser):
     nid = models.AutoField(primary_key=True)
     phone=models.CharField(max_length=11)
-    avatar=models.FileField(upload_to='media/avatar/',default='media/avatar/default.png')
+    avatar=models.FileField(upload_to='media/avatar/',default='avatar/default.png')
 
     blog=models.OneToOneField(to='Blog',to_field='nid',null=True)
 
