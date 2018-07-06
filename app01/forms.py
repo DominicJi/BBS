@@ -1,7 +1,7 @@
 from django import forms
 from django.core.validators import RegexValidator
 from django.core.validators import ValidationError
-
+from app01 import models
 
 class UserForm(forms.Form):
     username=forms.CharField(
@@ -79,6 +79,9 @@ class UserForm(forms.Form):
         #从form组件中拿出符合我字段定义的基本要求数据用户名
         value=self.cleaned_data.get('username')
         #判断输入的用户名中是否含有JBY字段，有就抛出提示信息
+        user_obj=models.UserInfo.objects.filter(username=value)
+        if user_obj:
+            raise ValidationError('用户名已存在')
         if 'JBY' in value:
             raise ValidationError('不能用爸爸的姓名拼音')
         else:
@@ -140,7 +143,6 @@ class Set_password(forms.Form):
         # 校验的列表内不仅可以是正则，也可以是自定义的校验函数
         # validators=[RegexValidator(r'\d','密码必须包含数字'),RegexValidator(r'[a-zA-Z]','密码必须包含字母')]
     )
-
     def clean(self):
         new_password=self.cleaned_data.get('new_password')
         confirm_password=self.cleaned_data.get('confirm_password')

@@ -31,11 +31,12 @@ urlpatterns = [
     url(r'^login2/',views.login2),
     url(r'^pcgetcaptcha/',views.pcgetcaptcha),
     url(r'^reg/',views.reg),
-
+    url(r'^updown/$',views.updown),
     # media路由配置
     url(r'^media/(?P<path>.*)$', serve, {"document_root": settings.MEDIA_ROOT}),
 
-    url(r'^app01/',include(app01_urls))
+    url(r'^app01/',include(app01_urls)),
+
 ]
 
 

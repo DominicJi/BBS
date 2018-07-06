@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from app01 import forms
 from app01 import models
 from geetest import GeetestLib
+from utils import mypage
 # Create your views here.
 
 
@@ -154,8 +155,14 @@ def login2(request):
 
 
 def home(request):
-    article_list=models.Article.objects.all()
-    return render(request,'home.html',{'article_list':article_list})
+    article_list = models.Article.objects.all()
+    total_num = article_list.count()
+    current_page = request.GET.get('page')
+    url_prefix = request.path_info.strip('/')
+    page_obj = mypage.Page(total_num, current_page, url_prefix)
+    article_list = article_list[page_obj.data_start:page_obj.data_end]
+    page_html = page_obj.page_html()
+    return render(request,'home.html',{'article_list':article_list,'page_html':page_html})
 
 def logout(request):
     #直接调用auth内置的注销方法
@@ -245,7 +252,13 @@ def index(request,username,*args):
         else:
             year,month=args[1].split('-')
             article_list=models.Article.objects.filter(user=user_obj).filter(create_time__year=year,create_time__month=month)
-    return render(request,'index.html',{'blog':blog,'article_list':article_list,'username':username})
+    total_num=article_list.count()
+    current_page=request.GET.get('page')
+    url_prefix=request.path_info.strip('/')
+    page_obj = mypage.Page(total_num, current_page, url_prefix)
+    article_list = article_list[page_obj.data_start:page_obj.data_end]
+    page_html = page_obj.page_html()
+    return render(request,'index.html',{'blog':blog,'article_list':article_list,'username':username,'page_html':page_html})
 
 def article_detail(request,username,article_id):
     user_obj=models.UserInfo.objects.filter(username=username).first()
@@ -254,8 +267,48 @@ def article_detail(request,username,article_id):
     else:
         blog=user_obj.blog
     article_obj=models.Article.objects.filter(pk=article_id).first()
-    return render(request,'article_detail.html',{'username':username,'blog':blog,'article':article_obj})
+    comment_list=models.Comment.objects.filter(article_id=article_id)
+    return render(request,'article_detail.html',{'username':username,'blog':blog,'article':article_obj,'comment_list':comment_list})
 
+
+
+def updown(request):
+    ret={'code':0}
+    #从request中取出的数据都是字符串！！！
+    is_up=request.POST.get('is_up')
+    article_id=request.POST.get('article_id')
+    user_id=request.POST.get('user_id')
+    #由于数据库点赞反对字段用的是布尔类型，这里需要将获取的字符串数据转换一下
+    is_up=True if is_up.upper()=='TRUE' else False
+    #先判断这个用户是不是作者本人
+    if models.Article.objects.filter(nid=article_id,user_id=user_id):#这里任意忘记外键关联字段自动加后缀_id
+        ret['code']=1
+        ret['data']='不可以赞自己'if is_up else '不可以反对自己'
+    #判断这个用户有没有给这篇文章点过了赞或者反对了
+    else:
+        is_exist=models.ArticleUpDown.objects.filter(user_id=user_id,article_id=article_id)
+        if is_exist:
+            ret['code']=1
+            ret['data']='已经点赞过了'if is_up else '已经反对过了'
+        #非作者非二次点赞反对，开启事务，计入数据库并同时更新文章列表中的赞免数
+        else:
+            from django.db import transaction
+            from django.db.models import F
+            #开启事务，保证数据操作的原子性
+            with transaction.atomic():
+                #数据库写入点赞记录
+                models.ArticleUpDown.objects.create(
+                    is_up=is_up,
+                    article_id=article_id,
+                    user_id=user_id
+                )
+                #去更新文章表中的数据
+                if is_up:
+                    models.Article.objects.filter(nid=article_id).update(up_count=F('up_count')+1)
+                else:
+                    models.Article.objects.filter(nid=article_id).update(down_count=F('down_count')+1)
+            ret['data']='点赞!' if is_up else '反对!'
+    return JsonResponse(ret)
 
 
 

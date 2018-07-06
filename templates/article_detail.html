@@ -1,39 +1,115 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/static/bootstrap-3.3.7/css/bootstrap.min.css">
-</head>
-<body>
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#">{{ blog.title }}</a>
-    </div>
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav>
-<div class="container-fluid">
-    <div class="col-md-3">
-        {% load my_inclusion %}
-        {% left_panel username %}
-    </div>
-    <div class="col-md-9">
-            <div class="article-detail">
-                <h1 class="article-title">{{ article.title }}</h1>
-                <div class="article-content">
-                    {{ article.articledetail.content|safe }}
-                </div>
-            </div>
-    </div>
-</div>
+{% extends 'base.html' %}
 
-<script src="/static/jquery-3.3.1.min.js"></script>
-<script src="/static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-</body>
-</html>
+
+
+{% block page-main %}
+    {#    文章详情的开始#}
+    <div class="article-detail">
+        <h1 class="article-title">{{ article.title }}</h1>
+        <div class="article-content">
+            {{ article.articledetail.content|safe }}
+        </div>
+    </div>
+    {#    点赞开始#}
+    <div id="div_digg">
+        <div class="diggit dig">
+            <span class="diggnum" id="digg_count">{{ article.up_count }}</span>
+        </div>
+        <div class="buryit dig">
+            <span class="burynum" id="bury_count">{{ article.down_count }}</span>
+        </div>
+        <div class="clearfix"></div>
+        <div class="diggword" id="digg_tips">
+        </div>
+    </div>
+    {#    点赞结束#}
+    <hr style="clear: both">
+{#    评论开始#}
+    <div class="comment-list">
+        <h3>评论列表</h3>
+        <ul class="list-group">
+            {% for comment in comment_list %}
+{#                先判断当前这个评论有没有父评论#}
+                {% if comment.parent_comment %}
+                    <li class="list-group-item">
+                    <p class="small"><span>#{{ forloop.counter }}楼</span><span>{{ comment.create_time }}</span><a
+                            href="/app01/{{ comment.user.username }}">{{ comment.user.username }}</a></p>
+                    <div>
+                        <p>@ <span>{{ comment.parent_comment.user.username }}</span></p>
+                        <p class="well">{{ comment.content }}</p>
+                    </div>
+                    </li>
+                    {% else %}
+                        <li class="list-group-item">
+                        <p class="small"><span>#{{ forloop.counter }}楼</span><span>{{ comment.create_time }}</span><a
+                                href="/app01/{{ comment.user.username }}">{{ comment.user.username }}</a></p>
+                        <p>{{ comment.content }}</p>
+                        </li>
+
+                {% endif %}
+            {% endfor %}
+
+        </ul>
+    </div>
+{#    评论结束#}
+{#    添加评论开始#}
+<div class="add-comment col-md-6">
+<h3>发布评论</h3>
+<div class="panel panel-success">
+    <div class="panel-heading">
+        <h3 class="panel-title">{{ request.user.username }}</h3>
+    </div>
+    <div class="panel-body">
+        <p>评论内容</p>
+        <textarea name="" id="" cols="30" rows="10" style="width: 100%"></textarea>
+    </div>
+    <button class="btn btn-success pull-right">提交</button>
+</div>
+</div>
+{% endblock %}
+
+
+
+{% block page-js %}
+<script>
+    $('#div_digg').on('click','.dig',function () {
+        //判断点击的标签有没有diggit样式类,以此来判断是想赞还是反对
+        let is_up=$(this).hasClass('diggit');
+        let article_id='{{ article.nid }}';
+        //只有登陆的用户才可操作，没有登陆跳转到登陆界面
+        let user_id='{{ request.user.nid }}';//这里有引号包起来是因为如果是字符串，不认识，会报undefined
+        if (!user_id){
+            location.href='/login/'
+        }else {
+            $.ajax({
+                url:'/updown/',
+                type:'POST',
+                data:{article_id:article_id,is_up:is_up,user_id:user_id},
+                success:function (data) {
+                    if (data.code){
+                        //把提示信息展示在页面上
+                        $('#digg_tips').text(data.data);
+                    }else {
+                        //先更新数字
+                        if (is_up){
+                            //点赞数+1
+                            let $upcount=$('#digg_count');
+                            $upcount.text(+$upcount.text()+1)//js中数字类型的字符串转数字前面加个加号即可
+                        }else {
+                            //反对数+1
+                            let $downcount=$('#bury_count');
+                            $downcount.text(+$downcount.text()+1);
+                        }
+                        //显示提示信息
+                        $('#digg_tips').text(data.data);
+                    }
+                }
+            })
+        }
+    })
+
+
+</script>
+
+
+{% endblock %}
