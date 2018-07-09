@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 
-
+{% block page-css %}
+    <style>
+    span {
+        margin-right: 10px;
+    }
+    </style>
+{% endblock %}
 
 {% block page-main %}
     {#    文章详情的开始#}
@@ -31,18 +37,18 @@
             {% for comment in comment_list %}
 {#                先判断当前这个评论有没有父评论#}
                 {% if comment.parent_comment %}
-                    <li class="list-group-item">
+                    <li class="list-group-item" parent_id="{{ comment.nid }}">
                     <p class="small"><span>#{{ forloop.counter }}楼</span><span>{{ comment.create_time }}</span><a
-                            href="/app01/{{ comment.user.username }}">{{ comment.user.username }}</a></p>
+                            href="/app01/{{ comment.user.username }}" >{{ comment.user.username }}</a><span id="callback" class="pull-right">回复</span></p>
                     <div>
                         <p>@ <span>{{ comment.parent_comment.user.username }}</span></p>
                         <p class="well">{{ comment.content }}</p>
                     </div>
                     </li>
                     {% else %}
-                        <li class="list-group-item">
+                        <li class="list-group-item" parent_id="{{ comment.nid }}">
                         <p class="small"><span>#{{ forloop.counter }}楼</span><span>{{ comment.create_time }}</span><a
-                                href="/app01/{{ comment.user.username }}">{{ comment.user.username }}</a></p>
+                                href="/app01/{{ comment.user.username }}">{{ comment.user.username }}</a><span id="callback" class="pull-right" >回复</span></p>
                         <p>{{ comment.content }}</p>
                         </li>
 
@@ -61,9 +67,9 @@
     </div>
     <div class="panel-body">
         <p>评论内容</p>
-        <textarea name="" id="" cols="30" rows="10" style="width: 100%"></textarea>
+        <textarea name="" id="t1" cols="30" rows="10" style="width: 100%"></textarea>
     </div>
-    <button class="btn btn-success pull-right">提交</button>
+    <button class="btn btn-success pull-right" id="b1">提交</button>
 </div>
 </div>
 {% endblock %}
@@ -72,6 +78,7 @@
 
 {% block page-js %}
 <script>
+{#点赞开始#}
     $('#div_digg').on('click','.dig',function () {
         //判断点击的标签有没有diggit样式类,以此来判断是想赞还是反对
         let is_up=$(this).hasClass('diggit');
@@ -106,8 +113,61 @@
                 }
             })
         }
-    })
+    });
+{#点赞结束#}
+{#发表根评论开始#}
+    $('#b1').click(function () {
+        let user_id='{{ request.user.pk }}';
+        let article_id='{{ article.pk }}';
+        let comment_content=$('#t1').val();
+        let pid='';
+        {#判断提交按钮中有没有放入pid数据#}
+        let $pid=$(this);
+        let is_pid=$pid.data('pid');
+        if (is_pid){
+            pid=is_pid;
+        {#    将文本框的首行@用户去除#}
+{#            先运用indexof定位到首行最后一个换行符，再通过索引切片取值取真正用户输入的子评论内容#}
+            comment_content=comment_content.slice(comment_content.indexOf('\n')+1);
+        {#    将按钮中的pid数据再删除掉，不然后续的评论一直都会是按钮pid对应的子评论#}
+            $pid.removeData('pid');
+        }
+        if (!user_id){
+            location.href='/login/'
+        }else{
+            $.ajax({
+                url:'app01/add_comment/',
+                type:'post',
+                data:{user_id:user_id,article_id:article_id,comment_content:comment_content,pid:pid},
+                success:function (data) {
+                    if (!data.flag){
+                        let level=$('.list-group li').length+1;
+                        let create_time=new Date().toLocaleString();
+                        let comment_html=`
+                        <li class="list-group-item">
+                        <p class="small"><span>#${level}楼</span><span>${create_time}</span><a
+                                href="/app01/{{ request.user.username }}">{{ request.user.username }}</a></p>
+                        <p>${comment_content}</p>
+                        </li>
+                        `;
+                        $('.list-group').append(comment_html);
+                        $('#t1').val('')
+                    }
+                }
+            })
+        }
 
+    });
+{#发表根评论结束#}
+{#发表子评论#}
+    $('.comment-list').on('click','#callback',function () {
+        {#    点击回复评论按钮，先聚焦文本输入框，再添加@信息#}
+       $('#t1').focus().val('@'+$(this).prev().text()+'\n');
+    {#    拿到父评论的nid值，放入提交的button按钮中#}
+        let pid=$(this).parent().parent().attr('parent_id');
+        $('#b1').data('pid',pid)
+    });
+{#发表子评论#}
 
 </script>
 

@@ -153,7 +153,6 @@ def login2(request):
             return JsonResponse(ret)
     return render(request,'login2.html',{'form_obj':form_obj})
 
-
 def home(request):
     article_list = models.Article.objects.all()
     total_num = article_list.count()
@@ -200,7 +199,6 @@ def set_password(request):
 
 def middle(request):
     return render(request,'middle.html')
-
 
 #form表单版注册数据
 def register(request):
@@ -312,8 +310,20 @@ def updown(request):
 
 
 
-
-
+def add_comment(request):
+    ret={'flag':0}
+    user_id=request.POST.get('user_id')
+    article_id=request.POST.get('article_id')
+    comment_content=request.POST.get('comment_content')
+    pid=request.POST.get('pid')
+    from django.db import transaction
+    from django.db.models import F
+    with transaction.atomic():
+        #评论表里添加数据
+        models.Comment.objects.create(article_id=article_id,user_id=user_id,content=comment_content,parent_comment_id=pid)
+        #文章表里的评论字段同步更新
+        models.Article.objects.filter(nid=article_id).update(comment_count=F('comment_count')+1)
+    return JsonResponse(ret)
 
 
 

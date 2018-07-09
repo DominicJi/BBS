@@ -3,7 +3,6 @@ from app01 import models
 
 register = template.Library()
 
-
 @register.inclusion_tag('left_tag.html')
 def left_panel(username):
     user_obj = models.UserInfo.objects.filter(username=username).first()
