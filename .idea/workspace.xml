@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b1a67e4e-b921-41f8-aaac-311e66c3eb1c" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app01/templatetags/my_inclusion.py" beforeDir="false" afterPath="$PROJECT_DIR$/app01/templatetags/my_inclusion.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app01/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/app01/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app01/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app01/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/article_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/article_detail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
-    </list>
+    <list default="true" id="b1a67e4e-b921-41f8-aaac-311e66c3eb1c" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -58,15 +50,22 @@
       <content type="file-editors">
         <state>
           <leaf>
-            <file leaf-file-name="article_detail.html" pinned="false" current-in-tab="true">
+            <file leaf-file-name="article_detail.html" pinned="false" current-in-tab="false">
               <entry file="file://$USER_HOME$/AppData/Local/Temp/HZ$D.099.475/article_detail.html">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="98">
-                    <caret line="149" column="7" selection-start-line="149" selection-start-column="7" selection-end-line="149" selection-end-column="7" />
+                  <state relative-caret-position="79">
+                    <caret line="148" column="8" selection-start-line="148" selection-start-column="8" selection-end-line="148" selection-end-column="8" />
                     <folding>
                       <element signature="e#3020#4679#0" />
                     </folding>
                   </state>
+                </provider>
+              </entry>
+            </file>
+            <file leaf-file-name="article_detail2.html" pinned="false" current-in-tab="true">
+              <entry file="file://$USER_HOME$/AppData/Local/Temp/HZ$D.099.479/article_detail2.html">
+                <provider selected="true" editor-type-id="text-editor">
+                  <state relative-caret-position="-1026" />
                 </provider>
               </entry>
             </file>
@@ -121,8 +120,8 @@
       <file leaf-file-name="article_detail.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/article_detail.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1376">
-              <caret line="44" column="65" lean-forward="true" selection-start-line="44" selection-start-column="65" selection-end-line="44" selection-end-column="65" />
+            <state relative-caret-position="125">
+              <caret line="157" column="9" lean-forward="true" selection-start-line="157" selection-start-column="9" selection-end-line="157" selection-end-column="9" />
               <folding>
                 <element signature="e#2480#3793#0#HTML" />
               </folding>
@@ -209,8 +208,8 @@
     <packageJsonPaths />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="196" />
-    <option name="y" value="35" />
+    <option name="x" value="117" />
+    <option name="y" value="30" />
     <option name="width" value="1115" />
     <option name="height" value="780" />
   </component>
@@ -359,7 +358,8 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="418" y="19" width="1115" height="780" extended-state="0" />
+    <frame x="196" y="35" width="1115" height="780" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="5" />
       <window_info anchor="bottom" id="Event Log" order="6" sideWeight="0.50116915" side_tool="true" weight="0.22509225" />
@@ -399,7 +399,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/AppData/Local/Temp/HZ$D.725.4260/index.html" />
     <entry file="file://$USER_HOME$/AppData/Local/Temp/HZ$D.725.4262/home.html" />
     <entry file="file://$USER_HOME$/AppData/Local/Temp/HZ$D.725.4263/index.html" />
     <entry file="file://$USER_HOME$/AppData/Local/Temp/HZ$D.725.4264/home.html" />
@@ -657,16 +656,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/article_detail.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1376">
-          <caret line="44" column="65" lean-forward="true" selection-start-line="44" selection-start-column="65" selection-end-line="44" selection-end-column="65" />
-          <folding>
-            <element signature="e#2480#3793#0#HTML" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/AppData/Local/Temp/HZ$D.099.478/login2.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-684" />
@@ -674,10 +663,25 @@
     </entry>
     <entry file="file://$USER_HOME$/AppData/Local/Temp/HZ$D.099.475/article_detail.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="98">
-          <caret line="149" column="7" selection-start-line="149" selection-start-column="7" selection-end-line="149" selection-end-column="7" />
+        <state relative-caret-position="79">
+          <caret line="148" column="8" selection-start-line="148" selection-start-column="8" selection-end-line="148" selection-end-column="8" />
           <folding>
             <element signature="e#3020#4679#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Temp/HZ$D.099.479/article_detail2.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1026" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/article_detail.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="125">
+          <caret line="157" column="9" lean-forward="true" selection-start-line="157" selection-start-column="9" selection-end-line="157" selection-end-column="9" />
+          <folding>
+            <element signature="e#2480#3793#0#HTML" />
           </folding>
         </state>
       </provider>
