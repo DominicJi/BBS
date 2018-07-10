@@ -43,7 +43,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if request.user.username %}
-                    <li id="i1"><a href="/media/{{ request.user.avatar }}" style="padding: 0"><img
+                    <li id="i1"><a href="/media/{{ request.user.avatar }}/" style="padding: 0"><img
                             src='/media/{{ request.user.avatar }}' alt="" class="form-control" id="avatar"></a></li>
                     <li><a>{{ request.user.username }}</a></li>
                     <li class="dropdown">

@@ -136,7 +136,7 @@
             location.href='/login/'
         }else{
             $.ajax({
-                url:'app01/add_comment/',
+                url:'/app01/add_comment/',
                 type:'post',
                 data:{user_id:user_id,article_id:article_id,comment_content:comment_content,pid:pid},
                 success:function (data) {
@@ -144,8 +144,9 @@
                         let level=$('.list-group li').length+1;
                         let create_time=new Date().toLocaleString();
                         let name='{{ request.user.username }}';
+                        let id=data.data;
                         let comment_html=`
-                        <li class="list-group-item">
+                        <li class="list-group-item" parent_id="${id}">
                         <p class="small"><span>#${level}楼</span><span>${create_time}</span><a
                                 href="/app01/${name}">${name}</a>
                                 <span id="callback" class="pull-right" >回复</span>

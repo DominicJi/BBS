@@ -37,6 +37,12 @@ urlpatterns = [
 
     url(r'^app01/',include(app01_urls)),
 
+    #后台管理
+    url(r'backend/', views.backend),
+    url(r'add_article/', views.add_article),
+    url(r'upload_img/', views.upload_img),
+    url(r'delete_article/(\d+)', views.delete_article),
+    url(r'edit_article/(\d+)', views.edit_article),
 ]
 
 
